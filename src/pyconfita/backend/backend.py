@@ -3,7 +3,7 @@ from typing import Any, Optional
 
 class Backend:
     """
-    Base class representing a key-value backend.
+    Base class representing a key-value store/backend.
     """
 
     name: str

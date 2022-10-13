@@ -1,6 +1,6 @@
 # PyConfita: Confita-like for Python
 
-Library that ease loading a value from multiple key-value stores, with reverse-order precedence.
+Library that ease loading a value from multiple key-value stores/backends with ordered evaluation.
 
 ## Disclaimer
 
@@ -9,12 +9,12 @@ Free implementation of the GO library [Confita](https://github.com/heetch/confit
 ## Features
 
 - Backends/stores supported:
-  - Environment variables (`EnvBackend`)
-  - File (YAML format) (`FileBackend`)
-  - Python dictionary object (`DictBackend`)
-  - Vault key-value store (`VaultBackend`)
-- Precedence is reverse-order: the last backend in list to provide a not None value is kept
-- Explicit type casting, supported for `str, bool, int, float`
+  - Environment variables (`EnvBackend`);
+  - File (YAML format) (`FileBackend`);
+  - Python dictionary object (`DictBackend`);
+  - Vault key-value store (`VaultBackend`);
+- Backends evaluation order: precedence of the evaluation is directly set by the order of backends in `Confita.backends` list. The last not `None` evaluated value is returned;
+- Explicit type casting supported for `str, bool, int, float`.
 
 ## Quickstart
 
@@ -59,7 +59,7 @@ assert c.get("KEY") == "VALUE" # Dict backend overrides previous backends' value
 
 ## Tests
 
-```bash
-pip install .
-pytest
 ```
+make test 
+```
+

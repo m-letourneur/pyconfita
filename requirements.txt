@@ -1,6 +1,0 @@
-pyYaml
-# Vault client
-hvac==0.11.2
-# Support
-black==22.3.0
-pytest
