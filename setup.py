@@ -26,7 +26,7 @@ with open("README.md", "r") as f:
 setup(
     name="pyconfita",
     version=get_version(),
-    description="Confita-like library",
+    description="PyConfita: Confita-like library for Python",
     url="https://github.com/birotaio/data-confita.git",
     packages=find_packages('src'),
     classifiers=[
