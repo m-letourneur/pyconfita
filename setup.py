@@ -17,6 +17,7 @@ setup(
     email="marc.letourneur.dev@gmail.com",
     license_file="LICENSE",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     packages=find_packages('src'),
     classifiers=[
         "Programming Language :: Python :: 3",
