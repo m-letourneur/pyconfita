@@ -22,8 +22,6 @@ class KeyRef:
 class Backend(_Backend):
     """
     Load a key from Vault key-value store.
-    WARNING: Env variables keys are by default stored lowercased in Vault KV
-    store.
     """
 
     name: str = "vault"
@@ -100,7 +98,7 @@ class Backend(_Backend):
 
     def _get_key(self, k_ref: KeyRef) -> Optional[str]:
         """
-        Read value for key. Defaults to None.
+        Read value for key in key-value store. Defaults to None.
 
         :param k_ref:
         :return:

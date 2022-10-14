@@ -1,3 +1,7 @@
+## 1.0.2 (2022-10-14)
+
+- Added case sensitivity option in Confita
+
 ## 1.0.1 (2022-10-13)
 
 - Updated setup.py and tools
