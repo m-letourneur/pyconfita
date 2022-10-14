@@ -10,10 +10,10 @@ test: venv
 	pytest
 
 fmt: venv
-	black src/
+	black tests/ src/
 
 check-fmt: venv
-	black src/ --check
+	black tests/ src/ --check
 
 prod-ready: test fmt
 

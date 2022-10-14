@@ -82,3 +82,27 @@ def test_get_ordered_backends():
     # Reverse list of backends
     c = Confita(logger=MOCK_LOGGER, backends=[bk_2, bk_1])
     assert c.get("K_1") == "bk_1"
+
+
+def test_case_sensitive():
+    """Test get. Ensure values are read when case sensitivity is enabled or
+    disabled"""
+    # Lowercased key
+    bk = DictBackend({"key_1": "bk_1"})
+    c = Confita(logger=MOCK_LOGGER, backends=[bk], case_sensitive=True)
+    assert c.get("key_1") == "bk_1"
+    assert c.get("KEY_1") == None
+
+    c = Confita(logger=MOCK_LOGGER, backends=[bk], case_sensitive=False)
+    assert c.get("key_1") == "bk_1"
+    assert c.get("KEY_1") == "bk_1"
+
+    # Uppercased key
+    bk = DictBackend({"KEY_1": "bk_1"})
+    c = Confita(logger=MOCK_LOGGER, backends=[bk], case_sensitive=True)
+    assert c.get("key_1") == None
+    assert c.get("KEY_1") == "bk_1"
+
+    c = Confita(logger=MOCK_LOGGER, backends=[bk], case_sensitive=False)
+    assert c.get("key_1") == "bk_1"
+    assert c.get("KEY_1") == "bk_1"

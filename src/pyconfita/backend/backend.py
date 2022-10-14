@@ -33,7 +33,7 @@ class Backend:
         _type = kwargs.get("type", str)
         if _type not in [str, bool, float, int]:
             raise Exception(
-                "Unsupported type conversion. Support for str," " bool, float, int."
+                "Unsupported type conversion. Support for str, bool, float, int."
             )
 
         if v is None:
@@ -57,5 +57,5 @@ class Backend:
 
         else:
             raise Exception(
-                "Type conversion cannot be achieved when variable" " is not a string"
+                "Type conversion cannot be achieved when variable is not a string"
             )
