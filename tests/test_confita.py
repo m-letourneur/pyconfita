@@ -32,6 +32,7 @@ def test_get_multiple_backends():
 
     # Set env variables
     os.environ.setdefault("K_3", "secret_3_from_environment")
+    os.environ.setdefault("K_7", "")
 
     # Dict file
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -62,11 +63,14 @@ def test_get_multiple_backends():
             # From File
             assert c.get("K_2") == "secret_2_from_yml"  # Overrides Vault
             assert c.get("K_4") == "secret_4"
+            assert c.get("K_8") is None
             # From dict
             assert c.get("K_5") == "secret_5"
             # From env
             # Overrides Vault
             assert c.get("K_3") == "secret_3_from_environment"  # Overrides Vault
+            assert c.get("K_7") == ""
+            assert c.get("K_UNKNOWN") is None
 
 
 def test_get_ordered_backends():

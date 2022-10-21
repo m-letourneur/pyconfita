@@ -7,8 +7,8 @@ def test_backend():
     """Test backend get"""
     bk = Backend()
 
-    env_var = "lower"
-    exp_value = "cased"
+    env_var = "foo"
+    exp_value = "bar"
     _val = bk.get(env_var)
     assert _val is None
 
@@ -16,6 +16,7 @@ def test_backend():
     _val = bk.get(env_var)
     assert _val == exp_value
 
+    # Unset variable should return None
     del os.environ[env_var]
     _val = bk.get(env_var)
     assert _val is None

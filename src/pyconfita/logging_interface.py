@@ -1,5 +1,12 @@
 class LoggingInterface:
-    """In-house logging interface"""
+    """Simple logging interface"""
+    def log(self, level=None, message=None, *args, **kwargs) -> None:
+        raise NotImplementedError
 
-    def zlog(self, level=None, message=None):
+class DummyLoggingInterface(LoggingInterface):
+    """
+    Dummy logging interface.
+    Do not use in production.
+    """
+    def log(self, level=None, message=None, *args, **kwargs) -> None:
         print(level, message)

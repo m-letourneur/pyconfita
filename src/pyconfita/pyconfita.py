@@ -41,7 +41,9 @@ class Confita:
         """
         _value = None
 
+        _all_values = []
         for bk in self.backends:
+            tmp_value = None
             if self.case_sensitive:
                 # Initial casing for key
                 tmp_value = bk.get(key, **kwargs)
@@ -52,16 +54,30 @@ class Confita:
                     or bk.get(key.upper(), **kwargs)
                     or bk.get(key.lower(), **kwargs)
                 )
-            if tmp_value is not None:  # Override if defined only
-                _value = tmp_value
-                self.logger.zlog(
-                    **{
-                        "level": "debug",
-                        "message": {"message": f"{bk.name} reads {key} = {tmp_value}"},
-                    }
-                )
+            self.logger.log(
+                **{
+                    "level": "debug",
+                    "message": {"message": f"{bk.name} reads {key} = {tmp_value}"},
+                }
+            )
+            _all_values.append(tmp_value)
+        self.logger.log(
+            **{
+                "level": "debug",
+                "message": {"message": f"All values read for {key} = {_all_values}"},
+            }
+        )
+        d_values = [v for v in _all_values if v is not None]
+        self.logger.log(
+            **{
+                "level": "debug",
+                "message": {"message": f"All defined values read for {key} = {d_values}"},
+            }
+        )
+        if len(d_values) > 0:
+            _value = d_values[-1]
 
-        self.logger.zlog(
+        self.logger.log(
             **{
                 "level": "debug",
                 "message": {"message": f"Final value read for {key} = {_value}"},
