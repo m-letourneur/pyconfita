@@ -77,7 +77,7 @@ c = Confita(
 
 assert c.get("KEY") == "VALUE_FROM_ENV" # Environment backend overrides previous backends' values
 assert c.get("BOOL_1") == "false" # No implicit type conversion 
-assert c.get("BOOL_2", **{"type": bool}) # Explicit type conversion requested
+assert c.get("BOOL_2", v_type=bool) # Explicit type conversion requested
 
 # Reverse evaluation order by reversing list of backends
 c = Confita(
@@ -115,7 +115,7 @@ c = Confita(
 )
 
 assert c.get("BOOL_1") == "false" # No implicit type conversion 
-assert c.get("BOOL_2", **{"type": bool}) # Explicit type conversion requested
+assert c.get("BOOL_2", v_type=bool) # Explicit type conversion requested
 
 ```
 
