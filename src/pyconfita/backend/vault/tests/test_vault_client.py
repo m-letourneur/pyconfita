@@ -5,14 +5,14 @@ import pytest
 import requests
 
 from pyconfita.backend.vault.vault import Backend, KeyRef
-from pyconfita.logging_interface import LoggingInterface
+from pyconfita.logging_interface import DummyLoggingInterface
 
 MOCK_VAULT_URL = "http://localhost:8200"
 MOCK_VAULT_DATA = {"data": {"k_1": "secret_1", "k_2": "secret_2"}}
 MOCK_VAULT_DATA_PATH = "path1"
 MOCK_VAULT_STORE = {"path1": MOCK_VAULT_DATA}
 MOCK_VAULT_TIMEOUT = 1
-MOCK_LOGGER = LoggingInterface()
+MOCK_LOGGER = DummyLoggingInterface()
 
 
 def mocked_requests_read(path, *args, **kwargs):

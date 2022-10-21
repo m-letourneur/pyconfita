@@ -71,7 +71,9 @@ class Confita:
         self.logger.log(
             **{
                 "level": "debug",
-                "message": {"message": f"All defined values read for {key} = {d_values}"},
+                "message": {
+                    "message": f"All defined values read for {key} = {d_values}"
+                },
             }
         )
         if len(d_values) > 0:

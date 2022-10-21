@@ -3,11 +3,11 @@ from unittest import mock
 
 from pyconfita import (
     Confita,
-    LoggingInterface,
     EnvBackend,
     FileBackend,
     DictBackend,
     VaultBackend,
+    DummyLoggingInterface
 )
 
 MOCK_VAULT_URL = "http://localhost:8200"
@@ -15,7 +15,7 @@ MOCK_VAULT_DATA = {"data": {"K_1": "secret_1", "K_2": "secret_2", "K_3": "secret
 MOCK_VAULT_DATA_PATH = "path1"
 MOCK_VAULT_STORE = {"path1": MOCK_VAULT_DATA}
 MOCK_VAULT_TIMEOUT = 10
-MOCK_LOGGER = LoggingInterface()
+MOCK_LOGGER = DummyLoggingInterface()
 
 
 def mocked_requests_read(path, *args, **kwargs):
