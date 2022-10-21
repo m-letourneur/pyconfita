@@ -107,6 +107,7 @@ def test_case_sensitive():
     assert c.get("key_1") == "bk_1"
     assert c.get("KEY_1") == "bk_1"
 
+
 def test_empty_string():
     """Test get. Ensure values empty string values are not discarded"""
 
