@@ -1,3 +1,8 @@
+## 1.0.3 (2022-10-21)
+
+- Updated value processing: empty string should not be dumped. Only dump None values.
+- Updated README
+
 ## 1.0.2 (2022-10-14)
 
 - Added case sensitivity option in Confita
