@@ -1,3 +1,8 @@
+## 1.0.5 (2022-10-21)
+
+- Updated value processing to ease debugging: append all values to list, then process it
+- Updated tests
+
 ## 1.0.4 (2022-10-21)
 
 - Updated value processing: empty string should not be dumped. Only dump None values.

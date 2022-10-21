@@ -67,7 +67,7 @@ class Backend(_Backend):
                 res = requests.get(self.url)
                 is_ready = res.status_code in [200, 201, 202, 203, 204]
             except Exception as e:
-                self.logger.zlog(
+                self.logger.log(
                     **{
                         "level": "debug",
                         "message": {"message": f"Waiting Vault agent, t = {t}"},
@@ -80,14 +80,14 @@ class Backend(_Backend):
             t = time.time() - start_time
 
         if not is_ready:
-            self.logger.zlog(
+            self.logger.log(
                 **{
                     "level": "error",
                     "message": {"message": f"Vault agent is not ready"},
                 }
             )
 
-        self.logger.zlog(
+        self.logger.log(
             **{
                 "level": "info",
                 "message": {"message": f"Vault agent is ready!"},
@@ -108,7 +108,7 @@ class Backend(_Backend):
             kv_store = self.cli.read(k_ref.path)
             v = kv_store.get("data", {}).get(k_ref.key, None)
         except Exception as e:
-            self.logger.zlog(
+            self.logger.log(
                 **{
                     "level": "error",
                     "message": {
@@ -155,7 +155,7 @@ class Backend(_Backend):
             _value = self._get_key(k_ref)
             return _value
         else:
-            self.logger.zlog(
+            self.logger.log(
                 **{
                     "level": "error",
                     "message": {
@@ -179,7 +179,7 @@ class Backend(_Backend):
             _values = self._get_multiple_keys(k_refs)
             return _values
         else:
-            self.logger.zlog(
+            self.logger.log(
                 **{
                     "level": "error",
                     "message": {

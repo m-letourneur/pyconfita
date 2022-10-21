@@ -12,6 +12,8 @@ def test_backend():
     assert bk.get("bool", **{"type": bool})
     assert bk.get("int", **{"type": int}) == 10
     assert bk.get("txt") == "world"
+    assert bk.get("null") is None
+    assert bk.get("txt_empty_string") == ""
 
 
 def test_backend_wrong_extension():
