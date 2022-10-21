@@ -52,7 +52,7 @@ class Confita:
                     or bk.get(key.upper(), **kwargs)
                     or bk.get(key.lower(), **kwargs)
                 )
-            if tmp_value:  # Override if defined only
+            if tmp_value is not None:  # Override if defined only
                 _value = tmp_value
                 self.logger.zlog(
                     **{
