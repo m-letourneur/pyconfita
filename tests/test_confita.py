@@ -106,3 +106,16 @@ def test_case_sensitive():
     c = Confita(logger=MOCK_LOGGER, backends=[bk], case_sensitive=False)
     assert c.get("key_1") == "bk_1"
     assert c.get("KEY_1") == "bk_1"
+
+def test_empty_string():
+    """Test get. Ensure values empty string values are not discarded"""
+
+    bk_1 = DictBackend({"K_1": "bk_1"})
+    bk_2 = DictBackend({"K_1": ""})
+
+    c = Confita(logger=MOCK_LOGGER, backends=[bk_1, bk_2])
+    assert c.get("K_1") == ""
+
+    # Reverse list of backends
+    c = Confita(logger=MOCK_LOGGER, backends=[bk_2, bk_1])
+    assert c.get("K_1") == "bk_1"
