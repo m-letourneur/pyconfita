@@ -1,3 +1,7 @@
+## 1.0.6 (2022-10-24)
+
+- Update Vault backend: enable key-value store caching
+
 ## 1.0.5 (2022-10-21)
 
 - Updated value processing to ease debugging: append all values to list, then process it

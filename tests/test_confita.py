@@ -7,7 +7,7 @@ from pyconfita import (
     FileBackend,
     DictBackend,
     VaultBackend,
-    DummyLoggingInterface
+    DummyLoggingInterface,
 )
 
 MOCK_VAULT_URL = "http://localhost:8200"
