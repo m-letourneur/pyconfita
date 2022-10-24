@@ -1,3 +1,7 @@
+## 1.0.7 (2022-10-24)
+
+- Updated requirement cachetools<5.0.0
+
 ## 1.0.6 (2022-10-24)
 
 - Update Vault backend: enable key-value store caching

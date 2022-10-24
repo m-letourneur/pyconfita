@@ -27,7 +27,7 @@ setup(
     python_requires=">=3.8, <3.9",
     install_requires=[
         "hvac==0.11.2",  # Vault client
-        "cachetools==5.2.0",
+        "cachetools<5.0.0",
         "pyYaml",
     ],
     package_dir={'': 'src'},
