@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Optional, Any, Dict
 import hvac
 import requests
-from cachetools import TTLCache
+from cacheout import Cache
 
 from pyconfita.backend.backend import Backend as _Backend
 from pyconfita.logging_interface import LoggingInterface
@@ -64,7 +64,7 @@ class Backend(_Backend):
         if enable_cache:
             maxsize = kwargs.get("cache_maxsize", 1024)
             ttl = kwargs.get("cache_ttl", 600)  # Defaults to 10min
-            self.cache = TTLCache(maxsize=maxsize, ttl=ttl)
+            self.cache = Cache(maxsize=maxsize, ttl=ttl)
 
     def is_agent_ready(self) -> bool:
         """
@@ -256,10 +256,7 @@ class Backend(_Backend):
             for k, v in kv_store.items():
                 cache_key = KeyRef(path=path, key=k).get_cache_key()
                 try:
-                    self.cache[cache_key] = v
-                    print(self.cache)
-                    print(self.cache.items())
-
+                    self.cache.set(cache_key, v)
                 except Exception as e:
                     self.logger.log(
                         **{

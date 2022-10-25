@@ -73,7 +73,6 @@ def test__cache_kv_store():
     _ = bk._cache_kv_store(path, kv_store)
     # Check one key-value pair has been cached
     key_ref = KeyRef(path=path, key="unseen")
-    print(bk.cache.items())
     assert bk.cache.get(key_ref.get_cache_key()) == "sofar"
 
     # Check all k-v are cached...
