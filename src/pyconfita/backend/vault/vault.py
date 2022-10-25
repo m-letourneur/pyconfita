@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Optional, Any, Dict
 import hvac
 import requests
-from cachetools import TTLCache
+from cacheout import Cache
 
 from pyconfita.backend.backend import Backend as _Backend
 from pyconfita.logging_interface import LoggingInterface
@@ -22,7 +22,8 @@ class KeyRef:
     key: str
 
     def get_cache_key(self) -> str:
-        return f"{self.path}-{self.key}"
+        # return f"{self.path}-{self.key}"
+        return f"{self.key}"
 
 
 class Backend(_Backend):
@@ -61,10 +62,11 @@ class Backend(_Backend):
             raise Exception("Vault logger must not be None")
         self.logger = logger
         self.cache = None
-        if enable_cache:
+        self.enable_cache = enable_cache
+        if self.enable_cache:
             maxsize = kwargs.get("cache_maxsize", 1024)
             ttl = kwargs.get("cache_ttl", 600)  # Defaults to 10min
-            self.cache = TTLCache(maxsize=maxsize, ttl=ttl)
+            self.cache = Cache(maxsize=maxsize, ttl=ttl)
 
     def is_agent_ready(self) -> bool:
         """
@@ -252,21 +254,24 @@ class Backend(_Backend):
         """
         Cache key-value store (loaded from path) if caching is enabled.
         """
-        if self.cache is not None:
+        if self.enable_cache:
             for k, v in kv_store.items():
                 cache_key = KeyRef(path=path, key=k).get_cache_key()
                 try:
-                    self.cache[cache_key] = v
-                    print(self.cache)
-                    print(self.cache.items())
-
+                    self.cache.set(cache_key, v)
+                    self.logger.log(
+                        **{
+                            "level": "debug",
+                            "message": {"message": f"[Vault] Set key {k}" f" in cache"},
+                        }
+                    )
                 except Exception as e:
                     self.logger.log(
                         **{
                             "level": "error",
                             "message": {
                                 "message": f"[Vault] Failed to cache value"
-                                f" for cache key={cache_key}"
+                                f" for key {k}"
                             },
                         }
                     )
@@ -288,14 +293,40 @@ class Backend(_Backend):
 
         _path = kwargs.get("path", self.default_key_path)
         k_ref = KeyRef(path=_path, key=key)
-        if self.cache:  # Cache enabled
+        if self.enable_cache:
+            self.logger.log(
+                **{
+                    "level": "debug",
+                    "message": {
+                        "message": f"[Vault][cache enabled] try to get key"
+                        f" {key} from cache"
+                    },
+                }
+            )
             _value = self.cache.get(
                 k_ref.get_cache_key(), default=KEY_NOT_FOUND_IN_CACHE
             )
             if _value == KEY_NOT_FOUND_IN_CACHE:
+                self.logger.log(
+                    **{
+                        "level": "debug",
+                        "message": {
+                            "message": f"[Vault] key {key} not" f" found in cache"
+                        },
+                    }
+                )
                 kv_store = self._get_kv_store_when_ready(path=k_ref.path)
                 self._cache_kv_store(path=k_ref.path, kv_store=kv_store)
-                _value = kv_store.get(k_ref.key, None)
+                _value = self.cache.get(k_ref.get_cache_key(), default=None)
         else:
+            self.logger.log(
+                **{
+                    "level": "debug",
+                    "message": {
+                        "message": f"[Vault][cache disabled] call"
+                        f" _get_key_when_ready"
+                    },
+                }
+            )
             _value = self._get_key_when_ready(k_ref)
         return _value
