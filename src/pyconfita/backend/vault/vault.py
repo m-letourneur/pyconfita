@@ -257,6 +257,12 @@ class Backend(_Backend):
                 cache_key = KeyRef(path=path, key=k).get_cache_key()
                 try:
                     self.cache.set(cache_key, v)
+                    self.logger.log(
+                        **{
+                            "level": "debug",
+                            "message": {"message": f"[Vault] Set key {k} in cache"},
+                        }
+                    )
                 except Exception as e:
                     self.logger.log(
                         **{
@@ -285,14 +291,37 @@ class Backend(_Backend):
 
         _path = kwargs.get("path", self.default_key_path)
         k_ref = KeyRef(path=_path, key=key)
-        if self.cache:  # Cache enabled
+        if self.cache is not None:  # Cache enabled
+            self.logger.log(
+                **{
+                    "level": "debug",
+                    "message": {
+                        "message": f"[Vault][cache enabled] try to get key"
+                        f" {key} from cache"
+                    },
+                }
+            )
             _value = self.cache.get(
                 k_ref.get_cache_key(), default=KEY_NOT_FOUND_IN_CACHE
             )
             if _value == KEY_NOT_FOUND_IN_CACHE:
+                self.logger.log(
+                    **{
+                        "level": "debug",
+                        "message": {"message": f"[Vault] key {key} not found in cache"},
+                    }
+                )
                 kv_store = self._get_kv_store_when_ready(path=k_ref.path)
                 self._cache_kv_store(path=k_ref.path, kv_store=kv_store)
-                _value = kv_store.get(k_ref.key, None)
+                _value = self.cache.get(k_ref.get_cache_key(), default=None)
         else:
+            self.logger.log(
+                **{
+                    "level": "debug",
+                    "message": {
+                        "message": f"[Vault][cache disabled] call _get_key_when_ready"
+                    },
+                }
+            )
             _value = self._get_key_when_ready(k_ref)
         return _value

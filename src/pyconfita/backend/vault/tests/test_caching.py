@@ -30,10 +30,6 @@ def test__get_kv_store():
         assert res == MOCK_VAULT_DATA.get("data")
 
 
-def mocked_requests_read(path, *args, **kwargs):
-    return MOCK_VAULT_STORE.get(path, None)
-
-
 def mocked_is_ready(*args, **kwargs):
     return True
 
@@ -73,6 +69,7 @@ def test__cache_kv_store():
     _ = bk._cache_kv_store(path, kv_store)
     # Check one key-value pair has been cached
     key_ref = KeyRef(path=path, key="unseen")
+    assert len(bk.cache.items()) == 2
     assert bk.cache.get(key_ref.get_cache_key()) == "sofar"
 
     # Check all k-v are cached...
