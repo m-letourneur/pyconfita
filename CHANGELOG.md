@@ -1,3 +1,7 @@
+## 1.0.12 (2022-10-26)
+
+- Updated logging in Vault backend
+
 ## 1.0.11 (2022-10-25)
 
 - Fixed Vault backend caching
