@@ -22,7 +22,6 @@ class KeyRef:
     key: str
 
     def get_cache_key(self) -> str:
-        # return f"{self.path}-{self.key}"
         return f"{self.key}"
 
 
@@ -318,6 +317,16 @@ class Backend(_Backend):
                 kv_store = self._get_kv_store_when_ready(path=k_ref.path)
                 self._cache_kv_store(path=k_ref.path, kv_store=kv_store)
                 _value = self.cache.get(k_ref.get_cache_key(), default=None)
+            else:
+                self.logger.log(
+                    **{
+                        "level": "debug",
+                        "message": {
+                            "message": f"[Vault][cache enabled] key"
+                            f" {key} found in cache"
+                        },
+                    }
+                )
         else:
             self.logger.log(
                 **{
