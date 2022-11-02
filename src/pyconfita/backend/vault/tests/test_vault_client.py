@@ -8,7 +8,9 @@ from pyconfita.backend.vault.vault import Backend, KeyRef
 from pyconfita.logging_interface import DummyLoggingInterface
 
 MOCK_VAULT_URL = "http://localhost:8200"
-MOCK_VAULT_DATA = {"data": {"k_1": "secret_1", "k_2": "secret_2"}}
+MOCK_VAULT_DATA = {
+    "data": {"k_1": "secret_1", "k_2": "secret_2", "k_4": "t", "k_5": "f", "k_6": "10"}
+}
 MOCK_VAULT_DATA_PATH = "path1"
 MOCK_VAULT_STORE = {"path1": MOCK_VAULT_DATA}
 MOCK_VAULT_TIMEOUT = 1
@@ -218,3 +220,38 @@ def test_is_agent_ready():
         bk = Backend(MOCK_LOGGER, readiness_timeout=timeout)
         is_ready = bk.is_agent_ready()
         assert not is_ready
+
+
+def test_get_struct():
+    with mock.patch(
+        "hvac.v1.Client.read", side_effect=lambda x: mocked_requests_read(x)
+    ):
+        with mock.patch(
+            "pyconfita.backend.vault.vault.Backend.is_agent_ready",
+            side_effect=mocked_is_ready,
+        ):
+            bk = Backend(
+                MOCK_LOGGER,
+                readiness_timeout=MOCK_VAULT_TIMEOUT,
+                default_key_path=MOCK_VAULT_DATA_PATH,
+            )
+
+            schema = {
+                "k_1": str,
+                "k_2": str,
+                "k_3": str,
+                "k_4": bool,
+                "k_5": bool,
+                "k_6": int,
+            }
+
+            res = bk.get_struct(schema)
+            assert res is not None
+            assert isinstance(res, dict)
+            assert len(res.keys()) == len(schema.keys())
+            assert res.get("k_1") == "secret_1"
+            assert res.get("k_2") == "secret_2"
+            assert res.get("k_3") is None
+            assert res.get("k_4") == True
+            assert res.get("k_5") == False
+            assert res.get("k_6") == 10
