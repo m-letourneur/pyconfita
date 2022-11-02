@@ -124,3 +124,63 @@ def test_empty_string():
     # Reverse list of backends
     c = Confita(logger=MOCK_LOGGER, backends=[bk_2, bk_1])
     assert c.get("K_1") == "bk_1"
+
+
+def test_get_struct():
+    """Test get_struct"""
+
+    # Set env variables
+    os.environ.setdefault("K_3", "secret_3_from_environment")
+    os.environ.setdefault("K_7", "")
+
+    # Dict file
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    vars_file_path = os.path.join(dir_path, "vars.yaml")
+
+    with mock.patch(
+        "hvac.v1.Client.read", side_effect=lambda x: mocked_requests_read(x)
+    ):
+        with mock.patch(
+            "pyconfita.backend.vault.vault.Backend.is_agent_ready",
+            side_effect=mocked_is_ready,
+        ):
+            c = Confita(
+                logger=MOCK_LOGGER,
+                backends=[
+                    VaultBackend(MOCK_LOGGER, default_key_path=f"path1"),
+                    FileBackend(vars_file_path),
+                    DictBackend({"K_5": "secret_5", "K_10": "10.54"}),
+                    EnvBackend(),
+                ],
+            )
+            # From Vault
+            schema = {
+                "K_1": str,
+                "K_2": str,
+                "K_3": str,
+                "K_4": str,
+                "K_5": str,
+                "K_6": str,
+                "K_7": str,
+                "K_8": str,
+                "K_9": bool,
+                "K_10": float,
+            }
+
+            _struct = c.get_struct(schema)
+            assert len(_struct.keys()) == len(schema.keys())
+
+            assert _struct.get("K_1") == "secret_1"
+            # From File
+            assert _struct.get("K_2") == "secret_2_from_yml"  # Overrides Vault
+            assert _struct.get("K_4") == "secret_4"
+            assert _struct.get("K_8") is None
+            assert _struct.get("K_9") == True
+            # From dict
+            assert _struct.get("K_5") == "secret_5"
+            assert _struct.get("K_10") == 10.54
+            # From env
+            # Overrides Vault
+            assert _struct.get("K_3") == "secret_3_from_environment"  # Overrides Vault
+            assert _struct.get("K_7") == ""
+            assert _struct.get("K_UNKNOWN") is None

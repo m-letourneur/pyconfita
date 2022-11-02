@@ -86,3 +86,18 @@ class Confita:
             }
         )
         return _value
+
+    def get_struct(self, schema: dict, **kwargs) -> dict:
+        """
+        Load all values defined in schema in a struct (dict) with identical
+        backend precedence used in get: returns the last not None value found
+        in order of the list of backends (defaults to None).
+        """
+        _struct = {k: None for k in schema.keys()}
+        for bk in self.backends:
+            tmp_struct = bk.get_struct(schema, **kwargs)
+            for k, v in tmp_struct.items():
+                if v is not None:
+                    _struct[k] = v
+
+        return _struct
