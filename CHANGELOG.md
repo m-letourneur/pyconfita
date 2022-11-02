@@ -1,3 +1,9 @@
+## 1.0.13 (2022-11-02)
+
+- Added `get_struct` wrapper to load entire struct of key-value based on one schema
+- Updated VaultBackend's `get_struct` to limit interactions to one request
+- Updated FileBackend to handle error when empty file loaded
+
 ## 1.0.12 (2022-10-26)
 
 - Updated logging in Vault backend
