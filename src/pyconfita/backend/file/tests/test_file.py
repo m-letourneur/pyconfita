@@ -22,3 +22,12 @@ def test_backend_wrong_extension():
     file_path = os.path.join(dir_path, "vars.txt")
     with pytest.raises(Exception):
         _ = Backend(file_path)
+
+
+def test_backend_empty_file():
+    """Test backend get with empty file"""
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    file_path = os.path.join(dir_path, "empty_vars.yaml")
+    bk = Backend(file_path)
+
+    assert bk.get("bool") is None
