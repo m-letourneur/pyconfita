@@ -37,4 +37,8 @@ class Backend(_Backend):
         _value = None
         with open(self.file_path, "r") as f:
             raw_yml = "".join(f.readlines())
-            return yaml.safe_load(raw_yml).get(key)
+            _struct = yaml.safe_load(raw_yml)
+            if _struct is not None:
+                _value = _struct.get(key)
+
+        return _value

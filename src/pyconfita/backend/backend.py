@@ -31,6 +31,8 @@ class Backend:
         """
         # Default expected type is string
         _type = kwargs.get("type", str)
+        if "v_type" in kwargs:
+            _type = kwargs.get("v_type", str)
         if _type not in [str, bool, float, int]:
             raise Exception(
                 "Unsupported type conversion. Support for str, bool, float, int."
@@ -59,3 +61,14 @@ class Backend:
             raise Exception(
                 "Type conversion cannot be achieved when variable is not a string"
             )
+
+    def get_struct(self, schema: dict, **kwargs) -> dict:
+        """
+        Load all values defined in schema in a struct (dict) with type
+        underlyong conversion
+        """
+        _struct = {}
+        for key, v_type in schema.items():
+            _struct[key] = self.get(key, v_type=v_type, **kwargs)
+
+        return _struct
