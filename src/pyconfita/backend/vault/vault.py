@@ -346,10 +346,10 @@ class Backend(_Backend):
 
         _path = kwargs.get("path", self.default_key_path)
         kv_store = self._get_kv_store_when_ready(path=_path)
-        for key, v_type in schema.items():
+        for key, _type in schema.items():
             _value = kv_store.get(key)
             if _value is not None:
-                _value = self._cast(_value, v_type=v_type)
+                _value = self._cast(_value, type=_type)
             _struct[key] = _value
 
         return _struct

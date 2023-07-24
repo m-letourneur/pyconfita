@@ -68,7 +68,7 @@ class Backend:
         underlyong conversion
         """
         _struct = {}
-        for key, v_type in schema.items():
-            _struct[key] = self.get(key, v_type=v_type, **kwargs)
+        for key, _type in schema.items():
+            _struct[key] = self.get(key, type=_type, **kwargs)
 
         return _struct
