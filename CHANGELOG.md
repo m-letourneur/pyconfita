@@ -1,3 +1,8 @@
+## 1.0.14 (2023-07-24)
+
+- Added StringBackend to load configuration from string (parsing dumped YAML/JSON)
+- Updated FileBackend to support both JSON and YAML formats
+
 ## 1.0.13 (2022-11-02)
 
 - Added `get_struct` wrapper to load entire struct of key-value based on one schema
