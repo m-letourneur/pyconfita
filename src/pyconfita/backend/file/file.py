@@ -2,15 +2,14 @@ import os
 from typing import Optional, Any
 
 import yaml
+import json
 
 from pyconfita.backend.backend import Backend as _Backend
 
 
 class Backend(_Backend):
     """
-    Load key from file.
-    WARNING: YAML support only!
-    Extensions must be in ['.yaml', '.yml']
+    Load key from file (YAML or JSON)
     """
 
     name = "file"
@@ -21,11 +20,30 @@ class Backend(_Backend):
         :param args:
         :param kwargs:
         """
+        _kv = None
+
         if not os.path.isfile(file_path):
             raise Exception("File not found")
-        if ".yaml" not in file_path and ".yml" not in file_path:
-            raise Exception("File extension should be .yaml or .yml")
-        self.file_path = file_path
+
+        try:
+            # Try as JSON
+            with open(file_path, "r") as f:
+                _kv = json.loads(f.read())
+        except Exception as e:
+            pass
+        if _kv is None:
+            try:
+                # Try as YAML
+                with open(file_path, "r") as f:
+                    raw_yml = "".join(f.readlines())
+                    _kv = yaml.safe_load(raw_yml)
+            except Exception as e:
+                pass
+
+        if _kv is None:
+            _kv = {}
+
+        self.kv = _kv
 
     def _get(self, key: str, **kwargs) -> Optional[Any]:
         """
@@ -34,11 +52,4 @@ class Backend(_Backend):
         :param kwargs:
         :return:
         """
-        _value = None
-        with open(self.file_path, "r") as f:
-            raw_yml = "".join(f.readlines())
-            _struct = yaml.safe_load(raw_yml)
-            if _struct is not None:
-                _value = _struct.get(key)
-
-        return _value
+        return self.kv.get(key)
