@@ -1,0 +1,7 @@
+{
+    "txt": "world",
+    "bool": true,
+    "int": 10,
+    "null": null,
+    "txt_empty_string": ""
+}
