@@ -13,6 +13,7 @@ Free implementation of the GO library [Confita](https://github.com/heetch/confit
   - File (YAML format) (`FileBackend`);
   - Python dictionary object (`DictBackend`);
   - Vault key-value store (`VaultBackend`);
+  - String parsing (serialized JSON) (`StringBackend`);
 - Backends evaluation order: directly set by the order of backends in `Confita.backends` list. The last not `None` evaluated value is returned;
 - Explicit type conversion supported for `str, bool, int, float`;
 - Case sensitivity option: option to read key with casing variations (uppercased, lowercased).
