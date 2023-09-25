@@ -1,3 +1,7 @@
+## 1.1.1 (2023-09-25)
+
+- Updated README
+
 ## 1.1.0 (2023-09-25)
 
 - Added support for Python versions >=3.8 and <3.12
