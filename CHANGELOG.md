@@ -1,3 +1,7 @@
+## 1.1.0 (2023-09-25)
+
+- Added support for Python versions >=3.8 and <3.12
+
 ## 1.0.14 (2023-07-24)
 
 - Added StringBackend to load configuration from string (parsing dumped YAML/JSON)
