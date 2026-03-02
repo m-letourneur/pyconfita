@@ -8,6 +8,7 @@ from pyconfita import (
     DictBackend,
     VaultBackend,
     DummyLoggingInterface,
+    hello_pyconfita,
 )
 
 MOCK_VAULT_URL = "http://localhost:8200"
@@ -184,3 +185,10 @@ def test_get_struct():
             assert _struct.get("K_3") == "secret_3_from_environment"  # Overrides Vault
             assert _struct.get("K_7") == ""
             assert _struct.get("K_UNKNOWN") is None
+
+
+def test_hello_pyconfita():
+    """Test hello_pyconfita function returns expected greeting message."""
+    result = hello_pyconfita()
+    assert result == "Hello from PyConfita!"
+    assert isinstance(result, str)

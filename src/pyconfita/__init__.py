@@ -5,3 +5,8 @@ from pyconfita.backend.dict.dict import Backend as DictBackend
 from pyconfita.backend.string.string import Backend as StringBackend
 from pyconfita.logging_interface import LoggingInterface, DummyLoggingInterface
 from pyconfita.pyconfita import Confita
+
+
+def hello_pyconfita():
+    """Return a simple greeting message from PyConfita."""
+    return "Hello from PyConfita!"
