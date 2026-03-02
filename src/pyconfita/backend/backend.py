@@ -1,5 +1,7 @@
 from typing import Any, Optional
 
+from pyconfita.type_casting import cast
+
 
 class Backend:
     """
@@ -28,39 +30,19 @@ class Backend:
         Supported types: [str, bool, float, int].
         Default conversion type is `str`.
         If value is None, returns None.
+
+        This method is a wrapper around the type_casting.cast function.
         """
         # Default expected type is string
         _type = kwargs.get("type", str)
         if "v_type" in kwargs:
             _type = kwargs.get("v_type", str)
-        if _type not in [str, bool, float, int]:
-            raise Exception(
-                "Unsupported type conversion. Support for str, bool, float, int."
-            )
 
-        if v is None:
-            return v
-
-        if isinstance(v, _type):
-            # Right type
-            return v
-
-        # Mismatch: value is not None and type is incorrect
-        if isinstance(v, str):
-            if _type == bool:
-                v = True if "t" in v.lower() else False
-                return v
-            if _type == int:
-                v = int(v)
-                return v
-            if _type == float:
-                v = float(v)
-                return v
-
-        else:
-            raise Exception(
-                "Type conversion cannot be achieved when variable is not a string"
-            )
+        try:
+            return cast(v, _type)
+        except ValueError as e:
+            # Convert ValueError to Exception for backward compatibility
+            raise Exception(str(e))
 
     def get_struct(self, schema: dict, **kwargs) -> dict:
         """
